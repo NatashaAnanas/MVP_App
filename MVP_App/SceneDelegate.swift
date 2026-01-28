@@ -16,7 +16,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         
-        let mainVC = BaseBuilder().mainBuild()
+        let builder = BaseBuilder()
+        let mainVC = builder.mainBuild()
         let nav = UINavigationController(rootViewController: mainVC)
         window.rootViewController = nav
 

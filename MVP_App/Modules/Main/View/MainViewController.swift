@@ -8,8 +8,8 @@
 import UIKit
 
 protocol MainViewProtocol: AnyObject {
-    func updateValue()
-    func updateImage(_ image: UIImage?, at indexPath: IndexPath)
+    func reloadData()
+    func updateImage(_ image: UIImage?, at index: Int)
 }
 
 final class MainViewController: UIViewController {
@@ -30,7 +30,7 @@ final class MainViewController: UIViewController {
     }
     
     private func setupUI() {
-        tableView.register(MainTableViewCell.self, forCellReuseIdentifier: "MainTableViewCell")
+        tableView.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.reuseId)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -49,7 +49,7 @@ final class MainViewController: UIViewController {
 }
 
 extension MainViewController: UITableViewDelegate {
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         presenter.didSelectItem(at: indexPath.row)
@@ -63,19 +63,19 @@ extension MainViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "MainTableViewCell",
+            withIdentifier: MainTableViewCell.reuseId,
             for: indexPath
         ) as? MainTableViewCell
         else { return UITableViewCell() }
         
         let index = indexPath.row
         cell.configure(title: presenter.item(at: index))
-
+        
         if let image = presenter.cachedImage(at: index) {
             cell.setImage(image)
         } else {
             cell.setImage(nil)
-            presenter.fetchImage(at: indexPath)
+            presenter.fetchImage(at: indexPath.row)
         }
         
         return cell
@@ -83,11 +83,14 @@ extension MainViewController: UITableViewDataSource {
 }
 
 extension MainViewController: MainViewProtocol {
-    func updateValue() {
-        tableView.reloadData()
+    func reloadData() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
-    func updateImage(_ image: UIImage?, at indexPath: IndexPath) {
+    func updateImage(_ image: UIImage?, at index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
         guard let cell = tableView.cellForRow(at: indexPath) as? MainTableViewCell else {
             return
         }

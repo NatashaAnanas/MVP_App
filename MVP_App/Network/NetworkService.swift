@@ -5,7 +5,7 @@
 //  Created by Наталья Коновалова on 26.01.2026.
 //
 
-import UIKit
+import Foundation
 
 // MARK: - Errors
 
@@ -21,11 +21,6 @@ protocol NetworkServiceProtocol {
     func request<T: Decodable>(
         urlString: String,
         completion: @escaping (Result<T, NetworkError>) -> Void
-    )
-    
-    func loadImage(
-        from urlString: String,
-        completion: @escaping (UIImage?) -> Void
     )
 }
 
@@ -78,24 +73,5 @@ final class NetworkService: NetworkServiceProtocol {
             }
         }
         task.resume()
-    }
-    
-    func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(nil)
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data, let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    completion(image)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    completion(nil)
-                }
-            }
-        }.resume()
     }
 }

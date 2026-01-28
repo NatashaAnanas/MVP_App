@@ -15,15 +15,21 @@ protocol BaseBuilderProtocol {
 final class BaseBuilder: BaseBuilderProtocol {
     
     private let networkService: NetworkServiceProtocol
+    private let imageLoaderService: ImageLoaderServiceProtocol
     
-    init(networkService: NetworkServiceProtocol = NetworkService.shared) {
+    init(networkService: NetworkServiceProtocol = NetworkService.shared,
+         imageLoaderService: ImageLoaderServiceProtocol = ImageLoaderService()) {
         self.networkService = networkService
+        self.imageLoaderService = imageLoaderService
     }
     
     func mainBuild() -> UIViewController {
         let viewController = MainViewController()
         let router = MainRouter(viewController: viewController, builder: self)
-        let presenter = MainPresenter(view: viewController, networkService: networkService, router: router)
+        let presenter = MainPresenter(view: viewController,
+                                      networkService: networkService,
+                                      imageLoaderService: imageLoaderService,
+                                      router: router)
         viewController.presenter = presenter
         
         return viewController

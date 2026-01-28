@@ -9,6 +9,8 @@ import UIKit
 
 final class MainTableViewCell: UITableViewCell {
     
+    static let reuseId = String(describing: MainTableViewCell.self)
+    
     private let mainImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -23,7 +25,7 @@ final class MainTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -38,7 +40,7 @@ final class MainTableViewCell: UITableViewCell {
         super.prepareForReuse()
         mainImageView.image = nil
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -51,7 +53,7 @@ final class MainTableViewCell: UITableViewCell {
         contentView.addSubview(mainLabel)
         contentView.addSubview(mainImageView)
     }
-
+    
     func setImage(_ image: UIImage?) {
         mainImageView.image = image
     }
@@ -60,9 +62,9 @@ final class MainTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             mainImageView.widthAnchor.constraint(equalToConstant: 100),
             mainImageView.heightAnchor.constraint(equalToConstant: 100),
-            mainImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            mainImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             mainImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            mainImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            mainImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             
             mainLabel.leadingAnchor.constraint(equalTo: mainImageView.trailingAnchor, constant: 8),
             mainLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),

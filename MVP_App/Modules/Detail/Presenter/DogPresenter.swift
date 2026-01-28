@@ -22,10 +22,8 @@ final class DogPresenter: DogPresenterProtocol {
     }
     
     func getInfo() {
-        DispatchQueue.main.async {
-            if let image = self.image  {
-                self.view?.setupImage(image)
-            }
+        if let image = self.image  {
+            self.view?.setupImage(image)
         }
     }
 }

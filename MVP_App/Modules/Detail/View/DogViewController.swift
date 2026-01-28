@@ -12,7 +12,7 @@ protocol DogViewProtocol: AnyObject {
 }
 
 final class DogViewController: UIViewController {
-
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -21,14 +21,14 @@ final class DogViewController: UIViewController {
     }()
     
     var presenter: DogPresenterProtocol!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         presenter.getInfo()
     }
-
+    
     private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(imageView)
@@ -46,6 +46,8 @@ final class DogViewController: UIViewController {
 
 extension DogViewController: DogViewProtocol {
     func setupImage(_ image: UIImage) {
-        imageView.image = image
+        DispatchQueue.main.async {
+            self.imageView.image = image
+        }
     }
 }
